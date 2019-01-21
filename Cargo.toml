@@ -1,0 +1,7 @@
+[package]
+name = "broken_link_finder"
+version = "0.1.0"
+authors = ["Clifford T. Matthews <ctm@devctm.com>"]
+edition = "2018"
+
+[dependencies]
