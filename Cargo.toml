@@ -1,7 +1,14 @@
 [package]
-name = "broken_link_finder"
+name = "mdck"
 version = "0.1.0"
-authors = ["Clifford T. Matthews <ctm@devctm.com>"]
+authors = ["Clifford T. Matthews <ctm@clifford.t.matthews@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+walkdir = "2"
+pulldown-cmark = "0.2.0"
+structopt = "0.2.14"
+
+[dependencies.clap]
+version = "2.32"
+features = [ "wrap_help" ]
