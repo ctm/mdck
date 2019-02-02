@@ -127,10 +127,6 @@ impl Config {
 
 pub fn ck_sources(config: &Config) -> Result<(), MdckError> {
     for source in &config.sources {
-        // let mut stdin;
-        // let mut lock;
-        // let mut bufreader;
-
         match source {
             Source::Stdin => show_stdin_broken_links()?,
             Source::File(path) => show_file_broken_links(path)?,
@@ -143,7 +139,7 @@ pub fn ck_sources(config: &Config) -> Result<(), MdckError> {
 fn show_broken_links(path: &Path) -> Result<(), MdckError> {
     for entry in WalkDir::new(path)
         .into_iter()
-        .filter_map(Result::ok) // silently discards errors
+        .filter_map(Result::ok) // TODO: stop silently discarding errors
         .filter(is_md)
     {
         show_broken_direntry_links(&entry)?
@@ -194,24 +190,30 @@ fn show_broken_links_for(contents: &str, parent: &Path, label: &str) -> Result<(
     for broken_link in Parser::new(contents)
         .with_offset()
         .filter_map(link_files_from_events)
-        .inspect(|link_file| {
-            if let Some(fragment) = &link_file.fragment {
-                eprintln!(
-                    "Warning: link with fragment \"{}\" found at about byte {} of {:?}",
-                    fragment, link_file.offset, label
-                );
-            }
-        })
+        //        .inspect(|link_file| {
+        //            if let Some(fragment) = &link_file.fragment {
+        //                let line = line_from_offset(contents, link_file.offset);
+        //                eprintln!(
+        //                    "Warning: link with fragment \"{}\" found on line {} of {:?}",
+        //                    fragment, line, label
+        //                );
+        //            }
+        //        })
         .filter(|uri| broken_link_file(uri, parent))
     {
-        let offset = broken_link.offset;
+        let line = line_from_offset(contents, broken_link.offset);
         println!(
-            "{:?} at about byte {} contains the broken link: {}",
-            label, offset, broken_link
+            "{:?} at line {} contains the broken link: {}",
+            label, line, broken_link
         );
     }
 
     Ok(())
+}
+
+fn line_from_offset(contents: &str, offset: usize) -> usize {
+    let span = &contents[0..offset];
+    bytecount::count(span.as_bytes(), b'\n') + 1
 }
 
 fn show_broken_direntry_links(entry: &DirEntry) -> Result<(), MdckError> {

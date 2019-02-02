@@ -1,6 +1,6 @@
 [package]
 name = "mdck"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Clifford T. Matthews <ctm@clifford.t.matthews@gmail.com>"]
 edition = "2018"
 
@@ -9,6 +9,15 @@ walkdir = "2"
 pulldown-cmark = "0.2.0"
 structopt = "0.2.14"
 
+[features]
+runtime-dispatch-simd = ["bytecount/runtime-dispatch-simd"]
+
 [dependencies.clap]
 version = "2.32"
 features = [ "wrap_help" ]
+
+[dependencies.bytecount]
+version = "0.5.0"
+features = [ "runtime-dispatch-simd" ]
+
+

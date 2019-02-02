@@ -20,10 +20,7 @@ extension.
 
 Currently, the only check is that if a link destination is a file, then there
 must be a file or directory for that destination.  Mdck does not attempt to open
-the destination or check permissions. Since the contents of the destination file
-are not inspected, mdck prints a warning when a destination contains a fragment.
-That warning is to remind you that mdck is not looking for the fragment.  It is
-not suggesting that the fragment is not there.
+the destination or check permissions.
 
 USAGE:
     mdck [sources]...
