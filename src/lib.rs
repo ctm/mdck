@@ -137,14 +137,12 @@ pub fn ck_sources(config: &Config) -> Result<(), MdckError> {
 }
 
 fn show_broken_links(path: &Path) -> Result<(), MdckError> {
-    for entry in WalkDir::new(path)
-        .into_iter()
-        .filter_map(Result::ok) // TODO: stop silently discarding errors
-        .filter(is_md)
-    {
-        show_broken_direntry_links(&entry)?
+    for entry in WalkDir::new(path) {
+        let entry = entry?;
+        if is_md(&entry) {
+            show_broken_direntry_links(&entry)?
+        }
     }
-
     Ok(())
 }
 
